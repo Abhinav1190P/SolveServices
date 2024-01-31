@@ -23,10 +23,7 @@ export function LoginForm() {
   const [password, setPassword] = useState<string>('');
   const [sliderPosition, setSliderPosition] = useState<number>(0);
   const [requirements, setRequirements] = useState<string[]>([
-    '😖 Weak. Must contain 8 characters',
-    '😐 So-so. Must contain at least 1 letter',
-    '😋 Almost. Must contain special symbol',
-    '😎 Awesome. Perfect password',
+    
   ]);
 
   const handleOnChange = (e: React.ChangeEvent<HTMLInputElement>) => {
