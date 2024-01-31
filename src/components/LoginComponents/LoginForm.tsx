@@ -28,7 +28,7 @@ export function LoginForm() {
     setForm((prev) => ({ ...prev, [id]: value }))
   }
 
-  const handleOnSubmit = (e: React.FormEvent) => {
+/*   const handleOnSubmit = (e: React.FormEvent) => {
     e.preventDefault()
     login(form).then(res => {
       fetcher.setToken(res.access_token)
@@ -42,7 +42,7 @@ export function LoginForm() {
       }
       toast.error('Something went wrong!')
     })
-  }
+  } */
 
   const checkPasswordStrength = (value: string) => {
 
@@ -60,7 +60,7 @@ export function LoginForm() {
     }
   };
 
-  const handlePasswordChange = (e: ChangeEvent<HTMLInputElement>): void => {
+  const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
     const newPassword: string = e.target.value;
     setPassword(newPassword);
     checkPasswordStrength(newPassword);
