@@ -1,5 +1,5 @@
 'use client'
-import { useState, useRef } from 'react'
+import { useState, useRef, useEffect } from 'react'
 import Link from 'next/link'
 import toast from 'react-hot-toast'
 import { useRouter } from 'next/navigation'
@@ -21,44 +21,78 @@ export function LoginForm() {
   const [activeBullet, setActiveBullet] = useState(1);
   const [strength, setStrength] = useState('');
   const [password, setPassword] = useState<string>('');
-
+  const [sliderPosition, setSliderPosition] = useState<number>(0);
+  const [requirements, setRequirements] = useState<string[]>([
+    '😖 Weak. Must contain 8 characters',
+    '😐 So-so. Must contain at least 1 letter',
+    '😋 Almost. Must contain special symbol',
+    '😎 Awesome. Perfect password',
+  ]);
 
   const handleOnChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { id, value } = e.target
     setForm((prev) => ({ ...prev, [id]: value }))
   }
 
-/*   const handleOnSubmit = (e: React.FormEvent) => {
-    e.preventDefault()
-    login(form).then(res => {
-      fetcher.setToken(res.access_token)
-      router.replace('/')
-    }).catch(error => {
-      if (error instanceof FetchingError) {
-        if (error.statusCode === 401) {
-          toast.error('Wrong email/username or password')
+  /*   const handleOnSubmit = (e: React.FormEvent) => {
+      e.preventDefault()
+      login(form).then(res => {
+        fetcher.setToken(res.access_token)
+        router.replace('/')
+      }).catch(error => {
+        if (error instanceof FetchingError) {
+          if (error.statusCode === 401) {
+            toast.error('Wrong email/username or password')
+          }
+          return
         }
-        return
-      }
-      toast.error('Something went wrong!')
-    })
-  } */
+        toast.error('Something went wrong!')
+      })
+    } */
 
-  const checkPasswordStrength = (value: string) => {
+  const [isFocused, setIsFocused] = useState(false);
 
 
+  const checkPasswordStrength = (value: string): void => {
+    const hasUppercase = /[A-Z]/.test(value);
+    const hasLowercase = /[a-z]/.test(value);
+    const hasDigit = /\d/.test(value);
+    const hasSpecialChar = /[@$!%*?&]/.test(value);
+    const isLengthValid = value.length >= 8;
 
-    const strongRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
-    const mediumRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[A-Za-z\d]{8,}$/;
+    let newSliderPosition = 0;
+    let newRequirements: string[] = [];
 
-    if (strongRegex.test(value)) {
-      setStrength('Strong');
-    } else if (mediumRegex.test(value)) {
-      setStrength('Medium');
+    if (!hasUppercase) {
+      newRequirements.push('😖 Weak. Must contain 8 characters');
     } else {
-      setStrength('Weak');
+      if (!hasLowercase) {
+        newRequirements.push('😐 So-so. Must contain at least 1 letter');
+      } else {
+        newSliderPosition = 40;
+        if (!hasDigit) {
+          newRequirements.push('😋 Almost. Must contain at least 1 digit');
+        } else {
+          newSliderPosition = 60;
+          if (!hasSpecialChar) {
+            newRequirements.push('😎 Awesome. Must contain special symbol');
+          } else {
+            newSliderPosition = 80;
+            if (!isLengthValid) {
+              newRequirements.push('🚀 Great! Perfect password');
+            } else {
+              newRequirements.push('🚀 Great! Perfect password');
+              newSliderPosition = 100;
+            }
+          }
+        }
+      }
     }
+
+    setSliderPosition(newSliderPosition);
+    setRequirements(newRequirements);
   };
+
 
   const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
     const newPassword: string = e.target.value;
@@ -89,7 +123,15 @@ export function LoginForm() {
     }
   };
 
-  console.log(strength)
+  useEffect(() => {
+    const intervalId = setInterval(() => {
+      const nextBullet = activeBullet % 3 + 1; // Loop through 1, 2, 3
+      moveSlider(nextBullet);
+    }, 3000);
+
+    // Clear interval on component unmount
+    return () => clearInterval(intervalId);
+  }, [activeBullet]);
 
   const bulletArray = [1, 2, 3];
   const [text, setText] = useState("Create your own courses");
@@ -116,8 +158,10 @@ export function LoginForm() {
                   <input
                     type="text"
                     minLength={4}
-                    className="input-field"
+                    className={`input-field ${isFocused ? 'active' : ''}`}
                     autoComplete="off"
+                    onFocus={() => setIsFocused(true)}
+                    onBlur={() => setIsFocused(false)}
                     required
                   />
                   <label>Name</label>
@@ -127,9 +171,11 @@ export function LoginForm() {
                   <input
                     type="password"
                     minLength={4}
-                    className="input-field"
+                    className={`input-field ${isFocused ? 'active' : ''}`}
                     autoComplete="off"
                     onChange={handlePasswordChange}
+                    onFocus={() => setIsFocused(true)}
+                    onBlur={() => setIsFocused(false)}
                     required
                   />
 
@@ -177,7 +223,9 @@ export function LoginForm() {
                   <input
                     type="text"
                     minLength={4}
-                    className="input-field"
+                    className={`input-field ${isFocused ? 'active' : ''}`}
+                    onFocus={() => setIsFocused(true)}
+                    onBlur={() => setIsFocused(false)}
                     autoComplete="off"
                     required
                   />
@@ -187,7 +235,9 @@ export function LoginForm() {
                 <div className="input-wrap">
                   <input
                     type="email"
-                    className="input-field"
+                    className={`input-field ${isFocused ? 'active' : ''}`}
+                    onFocus={() => setIsFocused(true)}
+                    onBlur={() => setIsFocused(false)}
                     autoComplete="off"
                     required
                   />
@@ -198,19 +248,32 @@ export function LoginForm() {
                   <input
                     type="password"
                     minLength={4}
-                    className="input-field"
                     autoComplete="off"
+                    className={`input-field ${isFocused ? 'active' : ''}`}
+                    onFocus={() => setIsFocused(true)}
+                    onBlur={() => setIsFocused(false)}
                     onChange={handlePasswordChange}
                     required
                   />
 
                   <label>Password</label>
                 </div>
-                {
-                  strength ? <div className='heading'>
-                    <h6 >Password Strength:</h6> <a href="#" className="toggle"> {strength}</a>
-                  </div> : null
-                }
+                <div className='input-wrap'>
+                  {requirements.map((requirement, index) => (
+                    <div key={index} style={{ color: 'green', paddingTop: 2 }}>
+                      {requirement}
+                    </div>
+                  ))}
+                  <div
+                    style={{
+                      width: `${sliderPosition}%`,
+                      height: '6px',
+                      backgroundColor: sliderPosition >= 66.7 ? 'green' : sliderPosition >= 33.3 ? 'yellow' : 'red',
+                      transition: 'width 0.3s',
+                    }}
+                  />
+                </div>
+
 
                 <input type="submit" value="Sign Up" className="sign-btn" />
 
@@ -227,9 +290,7 @@ export function LoginForm() {
 
           <div className="carousel">
             <div className="images-wrapper">
-              <img src="./img/image1.png" className="image img-1 show" alt="" />
-              <img src="./img/image2.png" className="image img-2" alt="" />
-              <img src="./img/image3.png" className="image img-3" alt="" />
+            <img src={`./assets/image${activeBullet}.png`} className={`image img-${activeBullet} show`} alt="" />
             </div>
 
             <div className="text-slider">

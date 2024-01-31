@@ -212,7 +212,7 @@ main.sign-up-mode .carousel {
   width: 55%;
   left: 45%;
   top: 0;
-  background-color: #159CEE;
+  background-color: #159beedf;
   border-radius: 2rem;
   display: grid;
   grid-template-rows: auto 1fr;
