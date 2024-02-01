@@ -30,8 +30,10 @@ export function LoginForm() {
     setPasswordFocused(true);
   };
 
-  const handlePasswordBlur = () => {
-    setPasswordFocused(false);
+  const handlePasswordBlur = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if(!e.target.value){
+      setPasswordFocused(false);
+    }
   };
 
 
@@ -42,8 +44,10 @@ export function LoginForm() {
     setNameFocused(true);
   };
 
-  const handleNameBlur = () => {
-    setNameFocused(false);
+  const handleNameBlur = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if(!e.target.value){
+      setNameFocused(false);
+    }
   };
 
 
@@ -208,10 +212,10 @@ export function LoginForm() {
                     className={`input-field ${isFocused ? 'active' : ''}`}
                     autoComplete="off"
                     onFocus={() => setIsFocused(true)}
-                    onBlur={() => setIsFocused(false)}
+                    onBlur={(e) => {if(!e.target.value){setIsFocused(false)}}}
                     required
                   />
-                  <label>Name</label>
+                  <label>Username/email</label>
                 </div>
 
                 <div className="input-wrap">
@@ -284,7 +288,7 @@ export function LoginForm() {
                     type="email"
                     className={`input-field ${isFocused ? 'active' : ''}`}
                     onFocus={() => setIsFocused(true)}
-                    onBlur={() => setIsFocused(false)}
+                    onBlur={(e) => {if(!e.target.value){setIsFocused(false)}}}
                     autoComplete="off"
                     required
                   />
