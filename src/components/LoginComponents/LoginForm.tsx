@@ -22,9 +22,30 @@ export function LoginForm() {
   const [strength, setStrength] = useState('');
   const [password, setPassword] = useState<string>('');
   const [sliderPosition, setSliderPosition] = useState<number>(0);
-  const [requirements, setRequirements] = useState<string[]>([
-    
-  ]);
+  const [requirements, setRequirements] = useState<string[]>(['']);
+  /// Password
+
+  const [isPasswordFocused, setPasswordFocused] = useState(false);
+  const handlePasswordFocus = () => {
+    setPasswordFocused(true);
+  };
+
+  const handlePasswordBlur = () => {
+    setPasswordFocused(false);
+  };
+
+
+  /// Name
+
+  const [isNameFocused, setNameFocused] = useState(false);
+  const handleNameFocus = () => {
+    setNameFocused(true);
+  };
+
+  const handleNameBlur = () => {
+    setNameFocused(false);
+  };
+
 
   const handleOnChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { id, value } = e.target
@@ -60,26 +81,29 @@ export function LoginForm() {
     let newSliderPosition = 0;
     let newRequirements: string[] = [];
 
-    if (!hasUppercase) {
-      newRequirements.push('😖 Weak. Must contain 8 characters');
-    } else {
-      if (!hasLowercase) {
-        newRequirements.push('😐 So-so. Must contain at least 1 letter');
+    if (value !== '') {
+
+      if (!hasUppercase) {
+        newRequirements.push('😖 Weak. Must contain 8 characters, 1 digit, 1 symbol');
       } else {
-        newSliderPosition = 40;
-        if (!hasDigit) {
-          newRequirements.push('😋 Almost. Must contain at least 1 digit');
+        if (!hasLowercase) {
+          newRequirements.push('😐 So-so. Must contain at least 1 letter');
         } else {
-          newSliderPosition = 60;
-          if (!hasSpecialChar) {
-            newRequirements.push('😎 Awesome. Must contain special symbol');
+          newSliderPosition = 40;
+          if (!hasDigit) {
+            newRequirements.push('😋 Almost. Must contain at least 1 digit');
           } else {
-            newSliderPosition = 80;
-            if (!isLengthValid) {
-              newRequirements.push('🚀 Great! Perfect password');
+            newSliderPosition = 60;
+            if (!hasSpecialChar) {
+              newRequirements.push('😎 Awesome. Must contain special symbol');
             } else {
-              newRequirements.push('🚀 Great! Perfect password');
-              newSliderPosition = 100;
+              newSliderPosition = 80;
+              if (!isLengthValid) {
+                newRequirements.push('🚀 Great! Perfect password');
+              } else {
+                newRequirements.push('🚀 Great! Perfect password');
+                newSliderPosition = 100;
+              }
             }
           }
         }
@@ -100,9 +124,13 @@ export function LoginForm() {
   const showIndicator = form.password !== '';
   const [isSignUpMode, setSignUpMode] = useState(false);
 
-  const toggleSignUpMode = () => {
+  const toggleSignUpMode = (e: React.MouseEvent<HTMLAnchorElement>) => {
+    e.preventDefault();
+    e.stopPropagation();
+    console.log('toggleSignUpMode is called');
     setSignUpMode((prevMode) => !prevMode);
   };
+
   const moveSlider = (index: number) => {
     setActiveBullet(index);
     switch (index) {
@@ -122,16 +150,38 @@ export function LoginForm() {
 
   useEffect(() => {
     const intervalId = setInterval(() => {
-      const nextBullet = activeBullet % 3 + 1; // Loop through 1, 2, 3
+      const nextBullet = activeBullet % 3 + 1;
       moveSlider(nextBullet);
     }, 3000);
 
-    // Clear interval on component unmount
     return () => clearInterval(intervalId);
   }, [activeBullet]);
 
   const bulletArray = [1, 2, 3];
   const [text, setText] = useState("Create your own courses");
+
+  interface InputFieldProps {
+    minLength?: number;
+  }
+
+  const InputField: React.FC<InputFieldProps> = ({ minLength = 4 }) => {
+    const [isFocused, setIsFocused] = useState(false);
+
+    return (
+      <input
+        type="text"
+        minLength={minLength}
+        className={`input-field ${isFocused ? 'active' : ''}`}
+        onFocus={() => setIsFocused(true)}
+        onBlur={() => setIsFocused(false)}
+        autoComplete="off"
+        required
+      />
+    );
+  };
+
+
+
 
   return (
     <main className={isSignUpMode ? 'sign-up-mode' : ''}>
@@ -168,11 +218,11 @@ export function LoginForm() {
                   <input
                     type="password"
                     minLength={4}
-                    className={`input-field ${isFocused ? 'active' : ''}`}
+                    className={`input-field ${isPasswordFocused ? 'active' : ''}`}
                     autoComplete="off"
                     onChange={handlePasswordChange}
-                    onFocus={() => setIsFocused(true)}
-                    onBlur={() => setIsFocused(false)}
+                    onFocus={handlePasswordFocus}
+                    onBlur={handlePasswordBlur}
                     required
                   />
 
@@ -220,10 +270,10 @@ export function LoginForm() {
                   <input
                     type="text"
                     minLength={4}
-                    className={`input-field ${isFocused ? 'active' : ''}`}
-                    onFocus={() => setIsFocused(true)}
-                    onBlur={() => setIsFocused(false)}
+                    className={`input-field ${isNameFocused ? 'active' : ''}`}
                     autoComplete="off"
+                    onFocus={handleNameFocus}
+                    onBlur={handleNameBlur}
                     required
                   />
                   <label>Name</label>
@@ -241,34 +291,36 @@ export function LoginForm() {
                   <label>Email</label>
                 </div>
 
-                <div className="input-wrap">
+                <div className="input-wrap-2">
                   <input
                     type="password"
                     minLength={4}
+                    className={`input-field ${isPasswordFocused ? 'active' : ''}`}
                     autoComplete="off"
-                    className={`input-field ${isFocused ? 'active' : ''}`}
-                    onFocus={() => setIsFocused(true)}
-                    onBlur={() => setIsFocused(false)}
                     onChange={handlePasswordChange}
+                    onFocus={handlePasswordFocus}
+                    onBlur={handlePasswordBlur}
                     required
                   />
 
                   <label>Password</label>
                 </div>
-                <div className='input-wrap'>
-                  {requirements.map((requirement, index) => (
-                    <div key={index} style={{ color: 'green', paddingTop: 2 }}>
-                      {requirement}
-                    </div>
-                  ))}
-                  <div
-                    style={{
-                      width: `${sliderPosition}%`,
-                      height: '6px',
-                      backgroundColor: sliderPosition >= 66.7 ? 'green' : sliderPosition >= 33.3 ? 'yellow' : 'red',
-                      transition: 'width 0.3s',
-                    }}
-                  />
+                <div className='container'>
+                  <div className='requirements-container' style={{ display: 'flex', flexDirection: 'column', marginTop: '8px' }}>
+                    {requirements.map((requirement, index) => (
+                      <div key={index} style={{ color: 'green', fontSize: '0.8rem', paddingTop: '2px' }}>
+                        {requirement}
+                      </div>
+                    ))}
+                    <div
+                      style={{
+                        width: `${sliderPosition}%`,
+                        height: '6px',
+                        backgroundColor: sliderPosition >= 66.7 ? 'green' : sliderPosition >= 33.3 ? 'yellow' : 'red',
+                        transition: 'width 0.3s',
+                      }}
+                    />
+                  </div>
                 </div>
 
 
@@ -287,7 +339,7 @@ export function LoginForm() {
 
           <div className="carousel">
             <div className="images-wrapper">
-            <img src={`./assets/image${activeBullet}.png`} className={`image img-${activeBullet} show`} alt="" />
+              <img src={`./assets/image${activeBullet}.png`} className={`image img-${activeBullet} show`} alt="" />
             </div>
 
             <div className="text-slider">

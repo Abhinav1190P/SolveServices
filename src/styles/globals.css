@@ -122,6 +122,12 @@ form.sign-up-form {
   margin-bottom: 2rem;
 }
 
+.input-wrap-2{
+  position: relative;
+  height: 37px;
+  margin-bottom: 0rem;
+}
+
 .input-field {
   position: absolute;
   width: 100%;
@@ -445,4 +451,14 @@ main.sign-up-mode .carousel {
 
 .different-login p {
   color: gray;
+}
+.container {
+  position: relative;
+  margin-bottom: 3rem;
+}
+
+.requirements-container {
+  position: absolute;
+  top: 100%;
+  left: 0;
 }
