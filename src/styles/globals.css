@@ -462,3 +462,14 @@ main.sign-up-mode .carousel {
   top: 100%;
   left: 0;
 }
+
+.input-row {
+  display: flex;
+  gap: 10px; 
+}
+
+.input-wrap {
+  flex: 1; 
+}
+
+

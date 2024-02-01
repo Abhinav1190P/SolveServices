@@ -152,6 +152,29 @@ export function LoginForm() {
     }
   };
 
+
+  const [isUsernameFocused, setIsUsernameFocused] = useState(false);
+  const handleUsernameFocus = () => setIsUsernameFocused(true);
+  const handleUsernameBlur = (e: React.ChangeEvent<HTMLInputElement>) => { if (!e.target.value) { setIsUsernameFocused(false) } };
+
+
+  const [isFirstNameFocused, setIsFirstNameFocused] = useState(false);
+  const handleFirstNameFocus = () => setIsFirstNameFocused(true);
+  const handleFirstNameBlur = (e: React.ChangeEvent<HTMLInputElement>) => { if (!e.target.value) { setIsFirstNameFocused(false) } };
+
+
+  const [isLastNameFocused, setIsLastNameFocused] = useState(false);
+  const handleLastNameFocus = () => setIsLastNameFocused(true);
+  const handleLastNameBlur = (e: React.ChangeEvent<HTMLInputElement>) => { if (!e.target.value) { setIsLastNameFocused(false) } };
+
+
+  const [isEmailFocused, setIsEmailFocused] = useState(false);
+  const handleEmailFocus = () => setIsEmailFocused(true);
+  const handleEmailBlur = (e: React.ChangeEvent<HTMLInputElement>) => { if (!e.target.value) { setIsEmailFocused(false) } };
+
+
+
+
   useEffect(() => {
     const intervalId = setInterval(() => {
       const nextBullet = activeBullet % 3 + 1;
@@ -263,32 +286,58 @@ export function LoginForm() {
                 <img src="./assets/logo.png" alt="easyclassName" className="w-100 h-100" />
               </div>
 
-              <div className="heading">
-                <h2>Get Started</h2>
-                <h6>Already have an account?</h6>
-                <a href="#" className="toggle" onClick={toggleSignUpMode}>Sign in</a>
-              </div>
+             
 
               <div className="actual-form">
                 <div className="input-wrap">
                   <input
                     type="text"
                     minLength={4}
-                    className={`input-field ${isNameFocused ? 'active' : ''}`}
+                    className={`input-field ${isUsernameFocused ? 'active' : ''}`}
                     autoComplete="off"
-                    onFocus={handleNameFocus}
-                    onBlur={handleNameBlur}
+                    onFocus={handleUsernameFocus}
+                    onBlur={handleUsernameBlur}
                     required
                   />
-                  <label>Name</label>
+                  <label>Username</label>
                 </div>
+
+
+                <div className="input-row">
+                  <div className="input-wrap">
+                    <input
+                      type="text"
+                      minLength={4}
+                      className={`input-field ${isFirstNameFocused ? 'active' : ''}`}
+                      autoComplete="off"
+                      onFocus={handleFirstNameFocus}
+                      onBlur={handleFirstNameBlur}
+                      required
+                    />
+                    <label>First Name</label>
+                  </div>
+
+                  <div className="input-wrap">
+                    <input
+                      type="text"
+                      minLength={4}
+                      className={`input-field ${isLastNameFocused ? 'active' : ''}`}
+                      autoComplete="off"
+                      onFocus={handleLastNameFocus}
+                      onBlur={handleLastNameBlur}
+                      required
+                    />
+                    <label>Last Name</label>
+                  </div>
+                </div>
+
 
                 <div className="input-wrap">
                   <input
                     type="email"
-                    className={`input-field ${isFocused ? 'active' : ''}`}
-                    onFocus={() => setIsFocused(true)}
-                    onBlur={(e) => { if (!e.target.value) { setIsFocused(false) } }}
+                    className={`input-field ${isEmailFocused ? 'active' : ''}`}
+                    onFocus={() => setIsEmailFocused(true)}
+                    onBlur={(e) => { if (!e.target.value) { setIsEmailFocused(false) } }}
                     autoComplete="off"
                     required
                   />
@@ -306,9 +355,9 @@ export function LoginForm() {
                     onBlur={handlePasswordBlur}
                     required
                   />
-
                   <label>Password</label>
                 </div>
+
                 <div className='container'>
                   <div className='requirements-container' style={{ display: 'flex', flexDirection: 'column', marginTop: '8px' }}>
                     {requirements.map((requirement, index) => (
@@ -327,9 +376,8 @@ export function LoginForm() {
                   </div>
                 </div>
 
-
                 <input type="submit" value="Sign Up" className="sign-btn" />
-               
+
                 <div className='different-login'>
                   <p>
                     or
@@ -342,16 +390,14 @@ export function LoginForm() {
                   </button>
                 </div>
 
-                
                 <p className="text">
                   By signing up, I agree to the
                   <a href="#">Terms of Services</a> and
                   <a href="#">Privacy Policy</a>
                 </p>
               </div>
-
-
             </form>
+
           </div>
 
           <div className="carousel">
