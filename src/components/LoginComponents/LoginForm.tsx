@@ -31,7 +31,7 @@ export function LoginForm() {
   };
 
   const handlePasswordBlur = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if(!e.target.value){
+    if (!e.target.value) {
       setPasswordFocused(false);
     }
   };
@@ -45,7 +45,7 @@ export function LoginForm() {
   };
 
   const handleNameBlur = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if(!e.target.value){
+    if (!e.target.value) {
       setNameFocused(false);
     }
   };
@@ -212,7 +212,7 @@ export function LoginForm() {
                     className={`input-field ${isFocused ? 'active' : ''}`}
                     autoComplete="off"
                     onFocus={() => setIsFocused(true)}
-                    onBlur={(e) => {if(!e.target.value){setIsFocused(false)}}}
+                    onBlur={(e) => { if (!e.target.value) { setIsFocused(false) } }}
                     required
                   />
                   <label>Username/email</label>
@@ -288,7 +288,7 @@ export function LoginForm() {
                     type="email"
                     className={`input-field ${isFocused ? 'active' : ''}`}
                     onFocus={() => setIsFocused(true)}
-                    onBlur={(e) => {if(!e.target.value){setIsFocused(false)}}}
+                    onBlur={(e) => { if (!e.target.value) { setIsFocused(false) } }}
                     autoComplete="off"
                     required
                   />
@@ -329,7 +329,20 @@ export function LoginForm() {
 
 
                 <input type="submit" value="Sign Up" className="sign-btn" />
+               
+                <div className='different-login'>
+                  <p>
+                    or
+                  </p>
+                </div>
 
+                <div className="input-wrap">
+                  <button type="button" className="login-with-google-btn">
+                    Sign in with Google
+                  </button>
+                </div>
+
+                
                 <p className="text">
                   By signing up, I agree to the
                   <a href="#">Terms of Services</a> and
